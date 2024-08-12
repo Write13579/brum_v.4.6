@@ -10,7 +10,7 @@ export async function dodajDoBazy(wynik: Omit<wynikiType, "Id">) {
     .insert(zapisy)
     .values({
       data: wynik.Data,
-      licznik: wynik.Licznik,
+      licznik: wynik.Licznik.toString(),
       paliwo: wynik.Paliwo.toString(),
       cenaPaliwa: wynik.CenaPaliwa.toString(),
       platnosc: wynik.Płatność.toString(),
