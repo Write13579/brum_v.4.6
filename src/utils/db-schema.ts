@@ -9,11 +9,11 @@ import {
 export const zapisy = pgTable("zapisy", {
   id: serial("id").primaryKey(),
   data: timestamp("data", { mode: "date" }).notNull(),
-  licznik: integer("licznik").notNull(),
-  paliwo: numeric("paliwo", { precision: 100 }).notNull(),
-  platnosc: numeric("platnosc", { precision: 100 }).notNull(),
-  cenaPaliwa: numeric("cenaPaliwa", { precision: 100 }).notNull(),
-  spalanie: numeric("spalanie", { precision: 1000 }).notNull(),
+  licznik: numeric("licznik", { scale: 1 }).notNull(),
+  paliwo: numeric("paliwo", { scale: 2 }).notNull(),
+  platnosc: numeric("platnosc", { scale: 2 }).notNull(),
+  cenaPaliwa: numeric("cenaPaliwa", { scale: 2 }).notNull(),
+  spalanie: numeric("spalanie", { scale: 3 }).notNull(),
 });
 
 export type zapisyType = typeof zapisy.$inferSelect;

@@ -64,7 +64,7 @@ export default function Zapisy(props: { default: zapisyType[] }) {
   const [wyniki, setWyniki] = useState<wynikiType[]>(
     props.default.map((zapis) => ({
       Data: zapis.data,
-      Licznik: zapis.licznik,
+      Licznik: parseFloat(zapis.licznik),
       Paliwo: parseFloat(zapis.paliwo),
       Płatność: parseFloat(zapis.platnosc),
       CenaPaliwa: parseFloat(zapis.cenaPaliwa),
@@ -190,38 +190,7 @@ export default function Zapisy(props: { default: zapisyType[] }) {
         >
           Dodaj
         </button>
-        {wyniki[0] && (
-          <div id="sortowanie">
-            <label>Sortuj wg </label>
-            <select
-              onChange={(e) => {
-                const params = new URLSearchParams(searchParams);
-                params.set("sort", e.target.value);
-                router.replace(`${pathname}?${params.toString()}`);
-              }}
-              className="text-black"
-            >
-              <option></option>
-              {Object.entries(wyniki[0])
-                .filter((x) => x[0] !== "Id")
-                .map((item) => (
-                  <option value={item[0]}>{item[0]}</option>
-                ))}
-            </select>
-            <select
-              onChange={(e) => {
-                const params = new URLSearchParams(searchParams);
-                params.set("order", e.target.value);
-                router.replace(`${pathname}?${params.toString()}`);
-              }}
-              className="text-black"
-            >
-              <option></option>
-              <option value={Order.ROSNACO}>{Order.ROSNACO}</option>
-              <option value={Order.MALEJACO}>{Order.MALEJACO}</option>
-            </select>
-          </div>
-        )}
+
         <div id="wyniki" className="flex flex-col gap-8">
           {/* SORTOWANIE WG WYBRANEGO ELEMENTU */}
           {wyniki.map((wynik, idx) => (
