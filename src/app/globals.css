@@ -31,3 +31,10 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer base {
+  input {
+    color: black;
+    padding: 0 3px 0 3px;
+  }
+}

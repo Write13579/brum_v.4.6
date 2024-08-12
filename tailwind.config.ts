@@ -8,6 +8,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        Shake: {
+          "0%, 100%": { transform: "rotate(1deg)" },
+          "50%": { transform: "rotate(-1deg)" },
+        },
+      },
+      animation: {
+        Shake: "Shake 6s infinite",
+      },
+
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -16,5 +26,6 @@ const config: Config = {
     },
   },
   plugins: [],
+  darkMode: "selector",
 };
 export default config;
