@@ -35,9 +35,9 @@ export default function RootLayout({
             </Link>
             <Link
               className="hover:drop-shadow-[0_0_5px_white] transition-all"
-              href="/cos"
+              href="/wordel"
             >
-              Cos
+              Wordel
             </Link>
           </nav>
           <h1 className=" cursor-default flex justify-center items-center text-2xl drop-shadow-[0_0_5px_white] shadow-white hover:drop-shadow-[0_0_5px_black] transition-all">
