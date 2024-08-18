@@ -1,11 +1,11 @@
 "use client";
 
-import db from "@/utils/db";
 import UnitInput from "../../components/unit-input";
 import { useEffect, useState } from "react";
-import { zapisy, zapisyType } from "@/utils/db-schema";
+import { zapisyType } from "@/utils/db-schema";
 import { dodajDoBazy, usunZBazy } from "./actions";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 export type InputyType = {
   Data: Date;
@@ -25,7 +25,7 @@ export enum Order {
   MALEJACO = "malejąco",
 }
 
-export default function Zapisy(props: { default: zapisyType[] }) {
+export default function Zapisy({ wyniki }: { wyniki: zapisyType[] }) {
   const units = {
     Data: "r.",
     Licznik: "km",
@@ -35,8 +35,14 @@ export default function Zapisy(props: { default: zapisyType[] }) {
     Spalanie: "l/100km",
   };
 
+  const getToday = () => {
+    const d = new Date();
+    d.setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000);
+    return d;
+  }; //zwraca mi dokladny dzien z gmt
+
   const [inputy, setInputy] = useState<InputyType>({
-    Data: new Date(),
+    Data: getToday(),
     Licznik: 0.0,
     Paliwo: 0.0,
     Płatność: 0.0,
@@ -61,49 +67,33 @@ export default function Zapisy(props: { default: zapisyType[] }) {
 
   //dodawanie wynikow
 
-  const [wyniki, setWyniki] = useState<wynikiType[]>(
-    props.default.map((zapis) => ({
-      Data: zapis.data,
-      Licznik: parseFloat(zapis.licznik),
-      Paliwo: parseFloat(zapis.paliwo),
-      Płatność: parseFloat(zapis.platnosc),
-      CenaPaliwa: parseFloat(zapis.cenaPaliwa),
-      Spalanie: parseFloat(zapis.spalanie),
-      Id: zapis.id,
-    }))
-  );
+  const { toast } = useToast();
 
   async function dodaj() {
     setTextButtons((t) => [...t, "usuń"]);
 
     if (inputyTablica.every((element) => element != 0 && !isNaN(element))) {
-      const inseted = await dodajDoBazy({
+      await dodajDoBazy({
         ...inputy,
         Spalanie: parseFloat(
           ((inputy.Paliwo / inputy.Licznik) * 100).toFixed(3)
         ),
       });
-
-      const nowyZapis: wynikiType = {
-        ...inputy,
-        Spalanie: parseFloat(
-          ((inputy.Paliwo / inputy.Licznik) * 100).toFixed(3)
-        ),
-        Id: inseted[0].insertedId,
-      };
-
-      setWyniki((w) => [...w, nowyZapis]);
+      router.refresh();
+      toast({
+        title: "Dodano zapis!",
+      });
     }
   }
 
   async function usun(index: number, id: number) {
     setTextButtons(textButtons.filter((_, itemIDX) => itemIDX !== index));
-    setWyniki(wyniki.filter((_, itemIDX) => itemIDX !== index));
     await usunZBazy(id);
+    router.refresh();
   }
 
   const [textButtons, setTextButtons] = useState<string[]>(
-    props.default.map((_) => "usuń")
+    wyniki.map((_) => "usuń")
   );
 
   const isDate = (value: unknown): value is Date =>
@@ -132,6 +122,7 @@ export default function Zapisy(props: { default: zapisyType[] }) {
               setInputy((i) => ({ ...i, Data: new Date(e.target.value) }))
             }
           />
+
           <UnitInput
             id="przejechane_km"
             label="Licznik"
@@ -191,6 +182,39 @@ export default function Zapisy(props: { default: zapisyType[] }) {
           Dodaj
         </button>
 
+        {wyniki[0] && (
+          <div id="sortowanie">
+            <label>Sortuj wg </label>
+            <select
+              onChange={(e) => {
+                const params = new URLSearchParams(searchParams);
+                params.set("sort", e.target.value);
+                router.replace(`${pathname}?${params.toString()}`);
+              }}
+              className="text-black"
+            >
+              <option></option>
+              {Object.entries(wyniki[0])
+                .filter((x) => x[0] !== "id")
+                .map((item) => (
+                  <option value={item[0]}>{item[0]}</option>
+                ))}
+            </select>
+            <select
+              onChange={(e) => {
+                const params = new URLSearchParams(searchParams);
+                params.set("order", e.target.value);
+                router.replace(`${pathname}?${params.toString()}`);
+              }}
+              className="text-black"
+            >
+              <option></option>
+              <option value={Order.ROSNACO}>{Order.ROSNACO}</option>
+              <option value={Order.MALEJACO}>{Order.MALEJACO}</option>
+            </select>
+          </div>
+        )}
+
         <div id="wyniki" className="flex flex-col gap-8">
           {/* SORTOWANIE WG WYBRANEGO ELEMENTU */}
           {wyniki.map((wynik, idx) => (
@@ -199,7 +223,7 @@ export default function Zapisy(props: { default: zapisyType[] }) {
               className="bg-white/10 p-8 px-10 grid grid-cols-3 items-center gap-1"
             >
               {Object.entries(wynik)
-                .filter((item) => item[0] !== "Id")
+                .filter((item) => item[0] !== "id")
                 .map((item) => (
                   <>
                     <label>{item[0]}:</label>
@@ -244,7 +268,7 @@ export default function Zapisy(props: { default: zapisyType[] }) {
                       //return () => clearTimeout(x);
                     }
                     if (textButtons[idx] === "na pewno?") {
-                      usun(idx, wynik.Id);
+                      usun(idx, wynik.id);
                     }
                   }}
                   className="mt-6 border-2 border-red-500 px-4 py-2 rounded-lg bg-red-500/60 font-bold active:bg-red-500/80 hover:shadow-[0_0_10px_1px] hover:shadow-red-500"

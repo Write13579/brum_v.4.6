@@ -1,14 +1,28 @@
 import db from "@/utils/db";
-import Zapisy, { Order, wynikiType } from "./zapisy";
-import { asc } from "drizzle-orm";
-import { zapisy as z } from "../../utils/db-schema";
+import Zapisy, { Order } from "./zapisy";
+import { asc, desc } from "drizzle-orm";
+import { zapisy as z, zapisyType } from "../../utils/db-schema";
 
-export default async function PageZapisy() {
-  const zapisy = await db.query.zapisy.findMany();
+export default async function PageZapisy({
+  searchParams,
+}: {
+  searchParams: { sort: keyof zapisyType; order: Order };
+}) {
+  function getOrder() {
+    switch (searchParams.order) {
+      case "rosnąco":
+        return asc(z[searchParams.sort]);
+
+      case "malejąco":
+        return desc(z[searchParams.sort]);
+    }
+  }
+  const zapisy = await db.query.zapisy.findMany({ orderBy: getOrder() });
+  console.log(getOrder(), searchParams);
 
   return (
     <>
-      <Zapisy default={zapisy} />
+      <Zapisy wyniki={zapisy} />
     </>
   );
 }
