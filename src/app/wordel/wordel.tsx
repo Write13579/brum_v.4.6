@@ -52,7 +52,7 @@ export default function Wordel() {
     }
 
     for (let i = 0; i < tablicaHaslo.length; i++) {
-      if (guess.includes(tablicaHaslo[i]) && guess[i] !== tablicaHaslo[i]) {
+      if (tablicaHaslo.includes(guess[i]) && guess[i] !== tablicaHaslo[i]) {
         wynik[i] = StatusType.istnieje;
       }
     }
@@ -61,28 +61,13 @@ export default function Wordel() {
   }
 
   function zmianaOkna(idx: number) {
-    setSlowo([
-      {
-        litera: (inpRef.current[0] as HTMLInputElement).value,
-        status: ustawKolory()[0],
-      },
-      {
-        litera: (inpRef.current[1] as HTMLInputElement).value,
-        status: ustawKolory()[1],
-      },
-      {
-        litera: (inpRef.current[2] as HTMLInputElement).value,
-        status: ustawKolory()[2],
-      },
-      {
-        litera: (inpRef.current[3] as HTMLInputElement).value,
-        status: ustawKolory()[3],
-      },
-      {
-        litera: (inpRef.current[4] as HTMLInputElement).value,
-        status: ustawKolory()[4],
-      },
-    ]);
+    const slowo = inpRef.current.map((input, index) => ({
+      litera: (input as HTMLInputElement).value,
+      status: ustawKolory()[index],
+    }));
+
+    setSlowo(slowo);
+
     if (inpRef.current[idx]!.value === "") {
       if (idx > 0) {
         inpRef.current[idx - 1]!.focus();
@@ -96,9 +81,9 @@ export default function Wordel() {
 
   function sprawdz() {
     setZgadywane((p) => [...p, slowo]);
-    for (let index = 0; index < slowo.length; index++) {
+    /*for (let index = 0; index < slowo.length; index++) {
       slowo[index].litera = "";
-    }
+    }*/
   }
 
   return (
