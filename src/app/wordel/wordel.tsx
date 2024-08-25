@@ -12,7 +12,7 @@ enum StatusType {
 
 type LiteraType = {
   litera: string;
-  status: StatusType;
+  status?: StatusType;
 };
 
 export default function Wordel() {
@@ -26,44 +26,12 @@ export default function Wordel() {
   ]);
   const inpRef = useRef<(HTMLInputElement | null)[]>(new Array(5).fill(null));
 
-  const haslo = "niger";
-
-  function ustawKolory() {
-    const l1 = inpRef.current[0] as HTMLInputElement;
-    const l2 = inpRef.current[1] as HTMLInputElement;
-    const l3 = inpRef.current[2] as HTMLInputElement;
-    const l4 = inpRef.current[3] as HTMLInputElement;
-    const l5 = inpRef.current[4] as HTMLInputElement;
-    const guess = [l1.value, l2.value, l3.value, l4.value, l5.value];
-    const tablicaHaslo = haslo.split("");
-
-    let wynik = [
-      StatusType.zle,
-      StatusType.zle,
-      StatusType.zle,
-      StatusType.zle,
-      StatusType.zle,
-    ];
-
-    for (let i = 0; i < tablicaHaslo.length; i++) {
-      if (guess[i] === tablicaHaslo[i]) {
-        wynik[i] = StatusType.dobre;
-      }
-    }
-
-    for (let i = 0; i < tablicaHaslo.length; i++) {
-      if (tablicaHaslo.includes(guess[i]) && guess[i] !== tablicaHaslo[i]) {
-        wynik[i] = StatusType.istnieje;
-      }
-    }
-
-    return wynik;
-  }
+  const haslo = "nigee";
 
   function zmianaOkna(idx: number) {
     const slowo = inpRef.current.map((input, index) => ({
       litera: (input as HTMLInputElement).value,
-      status: ustawKolory()[index],
+      //status: sprawdz()[index],
     }));
 
     setSlowo(slowo);
@@ -81,9 +49,57 @@ export default function Wordel() {
 
   function sprawdz() {
     setZgadywane((p) => [...p, slowo]);
-    /*for (let index = 0; index < slowo.length; index++) {
-      slowo[index].litera = "";
-    }*/
+
+    // const l1 = inpRef.current[0] as HTMLInputElement;
+    // const l2 = inpRef.current[1] as HTMLInputElement;
+    // const l3 = inpRef.current[2] as HTMLInputElement;
+    // const l4 = inpRef.current[3] as HTMLInputElement;
+    // const l5 = inpRef.current[4] as HTMLInputElement;
+    // const guess = [l1.value, l2.value, l3.value, l4.value, l5.value];
+
+    let guess = slowo.map((l) => l.litera);
+
+    let tablicaHaslo = haslo.split("");
+
+    // let wynik = [
+    //   StatusType.zle,
+    //   StatusType.zle,
+    //   StatusType.zle,
+    //   StatusType.zle,
+    //   StatusType.zle,
+    // ];
+
+    for (let i = 0; i < tablicaHaslo.length; i++) {
+      //gdy na dobrym miejscu
+      if (guess[i] === tablicaHaslo[i]) {
+        //wynik[i] = StatusType.dobre;
+
+        //aktualizacja statusu (kolor)
+        setSlowo((p) => {
+          const aktualizuj = [...p];
+          aktualizuj[i].status = StatusType.dobre;
+          return aktualizuj;
+        });
+        tablicaHaslo[i] = "0";
+      } else {
+        setSlowo((p) => {
+          const aktualizuj = [...p];
+          aktualizuj[i].status = StatusType.zle;
+          return aktualizuj;
+        });
+      }
+    }
+
+    for (let i = 0; i < tablicaHaslo.length; i++) {
+      if (tablicaHaslo.includes(guess[i]) && guess[i] !== tablicaHaslo[i]) {
+        setSlowo((p) => {
+          const aktualizuj = [...p];
+          aktualizuj[i].status = StatusType.istnieje;
+          return aktualizuj;
+        });
+        tablicaHaslo[tablicaHaslo.indexOf(guess[i])] = "0"; //gpt: Oznaczamy literę, aby nie była ponownie sprawdzana
+      }
+    }
   }
 
   return (
