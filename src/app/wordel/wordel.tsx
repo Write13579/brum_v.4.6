@@ -26,7 +26,7 @@ export default function Wordel() {
   ]);
   const inpRef = useRef<(HTMLInputElement | null)[]>(new Array(5).fill(null));
 
-  const haslo = "nigee";
+  const haslo = "nigee"; //zrobic tu api slownika czy cos
 
   function zmianaOkna(idx: number) {
     const slowo = inpRef.current.map((input, index) => ({
