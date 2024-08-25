@@ -16,6 +16,10 @@ type LiteraType = {
 };
 
 export default function Wordel() {
+  const url = `https://random-word-api.herokuapp.com/word?length=5`;
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   const [zgadywane, setZgadywane] = useState<LiteraType[][]>([[]]);
   const [slowo, setSlowo] = useState<LiteraType[]>([
     { litera: "", status: StatusType.zle },
