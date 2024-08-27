@@ -16,7 +16,21 @@ type LiteraType = {
 };
 
 export default function Wordel() {
-  const url = `https://random-word-api.herokuapp.com/word?length=5`;
+  async function giveMeWord(dlugoscSlowa: number) {
+    const url = `https://random-word-api.vercel.app/api?words=1&length=${dlugoscSlowa}`;
+    const res = await fetch(url);
+
+    if (res.ok) {
+      const data = await res.json();
+      const haslo: string = data.toString();
+      console.log(haslo);
+
+      return haslo;
+    }
+    return null;
+  }
+
+  const [haslo, setHaslo] = useState<string>("niger");
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,8 +43,6 @@ export default function Wordel() {
     { litera: "", status: StatusType.zle },
   ]);
   const inpRef = useRef<(HTMLInputElement | null)[]>(new Array(5).fill(null));
-
-  const haslo = "nigee"; //zrobic tu api slownika czy cos
 
   function zmianaOkna(idx: number) {
     const slowo = inpRef.current.map((input, index) => ({
@@ -54,30 +66,13 @@ export default function Wordel() {
   function sprawdz() {
     setZgadywane((p) => [...p, slowo]);
 
-    // const l1 = inpRef.current[0] as HTMLInputElement;
-    // const l2 = inpRef.current[1] as HTMLInputElement;
-    // const l3 = inpRef.current[2] as HTMLInputElement;
-    // const l4 = inpRef.current[3] as HTMLInputElement;
-    // const l5 = inpRef.current[4] as HTMLInputElement;
-    // const guess = [l1.value, l2.value, l3.value, l4.value, l5.value];
-
     let guess = slowo.map((l) => l.litera);
 
     let tablicaHaslo = haslo.split("");
 
-    // let wynik = [
-    //   StatusType.zle,
-    //   StatusType.zle,
-    //   StatusType.zle,
-    //   StatusType.zle,
-    //   StatusType.zle,
-    // ];
-
     for (let i = 0; i < tablicaHaslo.length; i++) {
       //gdy na dobrym miejscu
       if (guess[i] === tablicaHaslo[i]) {
-        //wynik[i] = StatusType.dobre;
-
         //aktualizacja statusu (kolor)
         setSlowo((p) => {
           const aktualizuj = [...p];
@@ -115,6 +110,16 @@ export default function Wordel() {
         <h1 className="font-bold text-4xl mb-8 drop-shadow-[0_0_10px_blue] text-center w-full animate-Shake">
           Wordel
         </h1>
+        <button
+          onClick={async () => {
+            const roboczeHaslo = await giveMeWord(5);
+            if (roboczeHaslo) {
+              setHaslo(roboczeHaslo);
+            }
+          }}
+        >
+          losuj slowo
+        </button>
         <div id="odpowiedzi">
           {zgadywane.map((slowo, idx) => {
             return (
