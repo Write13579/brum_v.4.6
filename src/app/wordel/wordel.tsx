@@ -130,12 +130,16 @@ export default function Wordel() {
                 {slowo.map((litera, idx) => {
                   return (
                     <div
-                      className={clsx("flex flex-row border-2 gap-10 p-2", {
-                        "border-red-500": litera.status === StatusType.zle,
-                        "border-yellow-400":
-                          litera.status === StatusType.istnieje,
-                        "border-green-500": litera.status === StatusType.dobre,
-                      })}
+                      className={clsx(
+                        "flex flex-row border-2 gap-10 p-2 w-8 h-8 justify-center items-center",
+                        {
+                          "border-red-500": litera.status === StatusType.zle,
+                          "border-yellow-400":
+                            litera.status === StatusType.istnieje,
+                          "border-green-500":
+                            litera.status === StatusType.dobre,
+                        }
+                      )}
                       key={idx}
                     >
                       {litera.litera}
