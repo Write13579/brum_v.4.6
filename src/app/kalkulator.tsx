@@ -79,7 +79,7 @@ export default function Spalanie() {
             step="0.5"
             value={inputs.spalanie}
             onChange={(e) =>
-              setInputs((i) => ({ ...i, spalanie: parseFloat(e.target.value) }))
+              setInputs((i) => ({ ...i, spalanie: isNaN(parseFloat(e.target.value.replace(",", "."))) ? parseFloat(e.target.value.replace(".", ",")) : parseFloat(e.target.value.replace(",", ".") }))
             }
           />
 
@@ -122,7 +122,7 @@ export default function Spalanie() {
             step="0.1"
             value={inputs.cena}
             onChange={(e) =>
-              setInputs((i) => ({ ...i, cena: parseFloat(e.target.value) }))
+              setInputs((i) => ({ ...i, cena: isNaN(parseFloat(e.target.value.replace(",", "."))) ? parseFloat(e.target.value.replace(".", ",")) : parseFloat(e.target.value.replace(",", ".") }))
             }
           />
         </div>
@@ -135,7 +135,7 @@ export default function Spalanie() {
             min="0"
             value={inputs.odlegosc}
             onChange={(e) =>
-              setInputs((i) => ({ ...i, odlegosc: parseFloat(e.target.value) }))
+              setInputs((i) => ({ ...i, odlegosc: isNaN(parseFloat(e.target.value.replace(",", "."))) ? parseFloat(e.target.value.replace(".", ",")) : parseFloat(e.target.value.replace(",", ".") }))
             }
           />
         </div>
@@ -153,7 +153,7 @@ export default function Spalanie() {
             max="5"
             value={inputs.osoby}
             onChange={(e) =>
-              setInputs((i) => ({ ...i, osoby: parseFloat(e.target.value) }))
+              setInputs((i) => ({ ...i, osoby: parseInt(e.target.value) }))
             }
           />
 
@@ -175,7 +175,7 @@ export default function Spalanie() {
             step="0.5"
             value={inputs.procent}
             onChange={(e) =>
-              setInputs((i) => ({ ...i, procent: parseFloat(e.target.value) }))
+              setInputs((i) => ({ ...i, procent: isNaN(parseFloat(e.target.value.replace(",", "."))) ? parseFloat(e.target.value.replace(".", ",")) : parseFloat(e.target.value.replace(",", ".") }))
             }
           />
 
@@ -195,7 +195,7 @@ export default function Spalanie() {
             min="0"
             value={inputs.parkingi}
             onChange={(e) =>
-              setInputs((i) => ({ ...i, parkingi: parseFloat(e.target.value) }))
+              setInputs((i) => ({ ...i, parkingi: isNaN(parseFloat(e.target.value.replace(",", "."))) ? parseFloat(e.target.value.replace(".", ",")) : parseFloat(e.target.value.replace(",", ".") }))
             }
           />
         </div>
@@ -210,7 +210,7 @@ export default function Spalanie() {
             onChange={(e) =>
               setInputs((i) => ({
                 ...i,
-                autostrada: parseFloat(e.target.value),
+                autostrada: isNaN(parseFloat(e.target.value.replace(",", "."))) ? parseFloat(e.target.value.replace(".", ",")) : parseFloat(e.target.value.replace(",", "."),
               }))
             }
           />
