@@ -1,7 +1,7 @@
 "use client";
 
 import UnitInput from "../../components/unit-input";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { zapisyType } from "@/utils/db-schema";
 import { dodajDoBazy, usunZBazy } from "./actions";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -197,7 +197,9 @@ export default function Zapisy({ wyniki }: { wyniki: zapisyType[] }) {
               {Object.entries(wyniki[0])
                 .filter((x) => x[0] !== "id")
                 .map((item) => (
-                  <option value={item[0]}>{item[0]}</option>
+                  <option key={item[0]} value={item[0]}>
+                    {item[0]}
+                  </option>
                 ))}
             </select>
             <select
@@ -225,7 +227,7 @@ export default function Zapisy({ wyniki }: { wyniki: zapisyType[] }) {
               {Object.entries(wynik)
                 .filter((item) => item[0] !== "id")
                 .map((item) => (
-                  <>
+                  <React.Fragment key={item[0]}>
                     <label>{item[0]}:</label>
                     <span>
                       {!isDate(item[1])
@@ -246,7 +248,7 @@ export default function Zapisy({ wyniki }: { wyniki: zapisyType[] }) {
                         ]
                       }
                     </span>
-                  </>
+                  </React.Fragment>
                 ))}
               <div id="usunBtn" className="flex col-span-3 justify-center">
                 <button
