@@ -28,7 +28,7 @@ export default function Spalanie() {
     autostrada: number;
   };
   const [inputs, setInputs] = useState<InputsType>({
-    spalanie: 0.1,
+    spalanie: 0,
     cena: 0.01,
     odlegosc: 0.5,
     osoby: 1,
@@ -173,6 +173,7 @@ export default function Spalanie() {
             type="number"
             min="0"
             step="0.5"
+            max={199.99}
             value={inputs.procent}
             onChange={(e) =>
               setInputs((i) => ({ ...i, procent: parseFloat(e.target.value) }))
