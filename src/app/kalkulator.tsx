@@ -28,9 +28,9 @@ export default function Spalanie() {
     autostrada: number;
   };
   const [inputs, setInputs] = useState<InputsType>({
-    spalanie: 0,
-    cena: 0,
-    odlegosc: 0,
+    spalanie: 0.1,
+    cena: 0.01,
+    odlegosc: 0.5,
     osoby: 1,
     procent: 0,
     parkingi: 0,

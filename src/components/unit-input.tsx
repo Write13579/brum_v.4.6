@@ -25,7 +25,6 @@ const UnitInput = ({
 
       <div className="flex items-center">
         <input
-          inputMode="decimal"
           className={clsx(
             "bg-white/10 text-white px-4 h-8 max-w-36",
             unit ? "rounded-l-md" : "rounded-md"
